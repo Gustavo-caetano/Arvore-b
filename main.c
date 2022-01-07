@@ -7,12 +7,11 @@ int main(int argc, char *argv[]){
 
     
     raiz=criarArv();
+    int escolha;
+    do
+    {
+        menu(&escolha);
+    } while (escolha!=1);
     
-    int b=atoi(argv[1]);
-    srand(time(NULL));
-    for(int i=1;i<b;i++){
-        int a=rand()%(i*10);
-        inserir(raiz,NULL,a);
-    }
-    printArv(raiz,0);
+    return 0;
 }

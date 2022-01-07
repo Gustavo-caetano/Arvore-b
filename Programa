@@ -3,7 +3,7 @@
 make |grep Nada >> /dev/null
 
 if [[ $? -eq 0 ]];then
-    ./programa $1
+    ./programa
 else
-    ./programa $1
+    ./programa
 fi

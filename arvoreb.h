@@ -20,7 +20,11 @@ Arvb *raiz;
 ///////////////////////////////////////////////
 
 Arvb *criarArv();
-void inserir(Arvb *arv,Arvb *pai,int valor);
-void printArv(Arvb *arv,int altura);
-
+void inserir(Arvb *arv,Arvb *pai,int valor);//inserção geral
+void printArv(Arvb *arv,int altura);//mostra em formato de arvore
+void printVetor(Arvb *arv);//mostra em formato de vetor
+void remover(Arvb *arv,Arvb *pai,int valor);
+void printFormat(Arvb *arv,int altura);
+Arvb* pesquisa(Arvb *arv,int valor);
+void menu(int *b);
 #endif
