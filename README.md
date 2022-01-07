@@ -7,13 +7,13 @@
 	<p>
 	</br>
 	<h4>Funcionamento:</h4>
-		A insercão ocorre na escolha da quantidade de números e a partir disso ira gerar a essa quantidade de numeros aleatórios.
+		Possui todas as funções:inserção,remoção e procura
 	</p>
 	<p>
 	<h4>Execução:</h4>
 	Para usar em sistemas linux:
 	</br>
-	Apenas execute ./Programa numero de elementos.
+	Apenas execute ./Programa 
 	</br>
 	Para uso em sistemas windows:
 	</br>
