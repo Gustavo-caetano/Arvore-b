@@ -13,5 +13,6 @@ int main(int argc, char *argv[]){
         menu(&escolha);
     } while (escolha!=1);
     
+    apagar(raiz);
     return 0;
 }
