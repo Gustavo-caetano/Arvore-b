@@ -7,6 +7,7 @@ int main(int argc, char *argv[]){
 
     
     raiz=criarArv();
+    
     int escolha;
     do
     {
