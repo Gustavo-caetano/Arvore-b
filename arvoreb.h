@@ -27,4 +27,5 @@ void remover(Arvb *arv,Arvb *pai,int valor);
 void printFormat(Arvb *arv,int altura);
 Arvb* pesquisa(Arvb *arv,int valor);
 void menu(int *b);
+void apagar(Arvb *);
 #endif
