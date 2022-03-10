@@ -79,12 +79,26 @@ void inserirOrd(Arvb *arv,int valor){//insere no vetor de forma ordenada
     arv->tamanho++;
 }
 
-int numeroFilho(Arvb *pai,Arvb *filho){//informa qual é a posicão do filho na lista pai
-    for(int i=0;i<=pai->tamanho;i++){
-        if(pai->filhos[i]==filho)
-            return i;
+int buscabinariaFilho(Arvb *arv,Arvb *filho,int esq,int dir){
+    if(esq==dir){
+        if(arv==filho){
+            return esq;
+        }else{
+            return -1;
+        }
+    }else{
+        int meio=(esq+dir)/2;
+
+        if(arv->filhos[meio]>filho)
+            return buscabinaria(arv,filho,esq,meio-1);
+        else
+            return buscabinaria(arv,filho,meio,dir);
     }
-    return -1;
+}
+
+
+int numeroFilho(Arvb *pai,Arvb *filho){//informa qual é a posicão do filho na lista pai
+   return buscabinariaFilho(pai,filho,0,pai->tamanho-1);
 }
 
 
@@ -146,10 +160,11 @@ void inserir(Arvb *arv,Arvb *pai,int valor){//insercao geral
 
 int buscabinaria(int *arv,int valor,int esq,int dir){
     if(esq==dir){
-        if(arv[esq]==valor)
-            return 1;
-        else
-            return 0;
+        if(arv[esq]==valor){
+            return esq;
+        }else{
+            return -1;
+        }
     }else{
         int meio=(esq+dir)/2;
 
@@ -162,7 +177,7 @@ int buscabinaria(int *arv,int valor,int esq,int dir){
 
 
 int possui(Arvb *arv,int valor){
-    return buscabinaria(arv->valores,valor,0,arv->tamanho-1);
+    return buscabinaria(arv->valores,valor,0,arv->tamanho-1)!=-1?1:0;
 }
 
 Arvb *pesquisa(Arvb *arv,int valor){
