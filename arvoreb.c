@@ -144,13 +144,25 @@ void inserir(Arvb *arv,Arvb *pai,int valor){//insercao geral
 }
 ///funcoes de pesquisa
 
-int possui(Arvb *arv,int valor){
-    for(int i=0;i<arv->tamanho;i++){
-        if(valor==arv->valores[i]){
+int buscabinaria(int *arv,int valor,int esq,int dir){
+    if(esq==dir){
+        if(arv[esq]==valor)
             return 1;
-        }
+        else
+            return 0;
+    }else{
+        int meio=(esq+dir)/2;
+
+        if(arv[meio]>valor)
+            return buscabinaria(arv,valor,esq,meio-1);
+        else
+            return buscabinaria(arv,valor,meio,dir);
     }
-    return 0;
+}
+
+
+int possui(Arvb *arv,int valor){
+    return buscabinaria(arv->valores,valor,0,arv->tamanho-1);
 }
 
 Arvb *pesquisa(Arvb *arv,int valor){
