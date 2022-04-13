@@ -6,7 +6,7 @@
 
 #define METADE MAX/2
 
-//////funcoes de criacão e informacoes sobre a arvore
+#pragma region criacao e informacao
 Arvb *criarArv(){//inicia a arvore
     Arvb *aux;
     aux=(Arvb*)malloc(sizeof(Arvb));
@@ -29,7 +29,10 @@ int tamanho(Arvb *arv){
 int cheia(Arvb *arv){
     return arv->tamanho>=MAX-1;
 }
-///////funcoes de insercao
+
+#pragma endregion
+
+#pragma region funcoes de insercao
 
 void dividir(Arvb *origem,Arvb *destino){
     /*
@@ -81,26 +84,40 @@ void inserirOrd(Arvb *arv,int valor){//insere no vetor de forma ordenada
 
 int buscabinariaFilho(Arvb *arv,Arvb *filho,int esq,int dir){
     if(esq==dir){
-        if(arv==filho){
+        if(arv->filhos[esq]->valores[0]==filho->valores[0])
             return esq;
-        }else{
+        else
             return -1;
-        }
     }else{
         int meio=(esq+dir)/2;
 
-        if(arv->filhos[meio]>filho)
-            return buscabinaria(arv,filho,esq,meio-1);
-        else
-            return buscabinaria(arv,filho,meio,dir);
+        if(arv->filhos[meio]->valores[0]<filho->valores[0]){
+            return buscabinariaFilho(arv,filho,meio+1,dir);
+        }else{
+            return buscabinariaFilho(arv,filho,esq,meio);
+        }
     }
 }
 
+int buscaProximo(Arvb *arv,int item ,int esq,int dir){
+    if(esq==dir){
+        if(arv->valores[esq]>item)
+            return esq;
+        else
+            return esq+1;
+    }else{
+        int meio=(esq+dir)/2;
 
-int numeroFilho(Arvb *pai,Arvb *filho){//informa qual é a posicão do filho na lista pai
-   return buscabinariaFilho(pai,filho,0,pai->tamanho-1);
+        if(arv->valores[meio]>item)
+            return buscaProximo(arv,item,esq,meio);
+        else
+            return buscaProximo(arv,item,meio+1,dir);
+    }
 }
 
+int numeroFilho(Arvb *pai,Arvb *filho){//informa qual é a posicão do filho na lista pai
+   return buscabinariaFilho(pai,filho,0,pai->tamanho);
+}
 
 void inserirFilho(Arvb *pai,Arvb *filho,int lugar){//insere um novo filho
     Arvb *aux,*aux1=filho;
@@ -110,7 +127,6 @@ void inserirFilho(Arvb *pai,Arvb *filho,int lugar){//insere um novo filho
         aux1=aux;
     }
 }
-
 
 void split(Arvb *arv,Arvb *pai){//efetua o split
     if(arv==raiz){
@@ -130,7 +146,7 @@ void split(Arvb *arv,Arvb *pai){//efetua o split
 }
 
 void inserir(Arvb *arv,Arvb *pai,int valor){//insercao geral
-    // printf("inserindo%d\n",valor);
+
    if(vaziaOrdem(arv)){
        printf("nao inicializada\n");
    }else{
@@ -140,23 +156,19 @@ void inserir(Arvb *arv,Arvb *pai,int valor){//insercao geral
             */
             inserirOrd(arv,valor);
         }else{
-            int i=0;
-            for(;i<arv->tamanho+1;i++){
-                if(valor<arv->valores[i]){
-                    inserir(arv->filhos[i],arv,valor);
-                    break;
-                }else if(i==arv->tamanho-1 && valor>arv->valores[i]){
-                    inserir(arv->filhos[i+1],arv,valor);
-                    break;
-                }
-            }
-          }
+            int i=buscaProximo(arv,valor,0,arv->tamanho-1);
+            inserir(arv->filhos[i],arv,valor);
+        }
+
         if(cheia(arv)){
             split(arv,pai);
         }
    }
 }
-///funcoes de pesquisa
+
+#pragma endregion
+
+#pragma region funcoes de pesquisa
 
 int buscabinaria(int *arv,int valor,int esq,int dir){
     if(esq==dir){
@@ -175,47 +187,34 @@ int buscabinaria(int *arv,int valor,int esq,int dir){
     }
 }
 
-
 int possui(Arvb *arv,int valor){
     return buscabinaria(arv->valores,valor,0,arv->tamanho-1)!=-1?1:0;
 }
 
 Arvb *pesquisa(Arvb *arv,int valor){
+
     if(vaziaOrdem(arv)){
         printf("nao iniciada\n");
         exit(1);
-    }else{
-        if(vazia(arv)){
-            printf("sem elementos\n");
-            exit(1);
-        }else{
-            if(possui(arv,valor)){
-                printf("possui na lista\n");
-                return arv;
-            }else{
-                if(vaziaOrdem(arv->filhos[0])){
-                    printf("nao possui na lista\n");
-                    return NULL;
-                }
-                else{
-                    int i=0;
-                    for(;i<arv->tamanho+1;i++){
-                        if(valor<arv->valores[i]){
-                            pesquisa(arv->filhos[i],valor);
-                            break;
-                        }else if(i==arv->tamanho-1 && valor>arv->valores[i]){
-                            pesquisa(arv->filhos[i+1],valor);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+    }else if(vazia(arv)){
+        printf("sem elementos\n");
+        exit(1);
+    }else if(possui(arv,valor)){
+        printf("possui na lista\n");
+        return arv;
+    }else if(vaziaOrdem(arv->filhos[0])){
+        printf("nao possui na lista\n");
+        return NULL;
     }
+    else{
+        int i=buscaProximo(arv,valor,0,arv->tamanho-1);
+        pesquisa(arv->filhos[i],valor);
+    }    
 }
 
+#pragma endregion
 
-///funcoes de remocao
+#pragma region  funcoes de remocao
 void adicionarPai(Arvb *pai,Arvb *filho,int local){
 
     /*
@@ -397,7 +396,9 @@ void apagar(Arvb *arv){
     }
 }
 
-////funcoes de printar a arvore
+#pragma endregion
+
+#pragma region  funcoes de printar a arvore
 
 void printLista(int *list,int tamanho){
     for(int i=0;i<tamanho;i++){
@@ -448,8 +449,10 @@ void printVetor(Arvb *arv){//printa e forma de vetor
     }
 }
 
-////////////////
-//Menu
+#pragma endregion
+
+
+#pragma region  Menu
 
 void menu(int *b){
     char escolha='0';
@@ -508,3 +511,5 @@ void menu(int *b){
         scanf("%c",&escolha);
     }
 }
+
+#pragma endregion
